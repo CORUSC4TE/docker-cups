@@ -1,3 +1,4 @@
+
 FROM alpine
 #
 # BUILD:
@@ -26,6 +27,14 @@ RUN apk update --no-cache && apk add --no-cache cups cups-filters avahi inotify-
 
 # Copy configuration files
 COPY root /
+
+# Copy Driver Files
+COPY drv /
+
+# Install Driver
+RUN mkdir -p /var/spool/lpd/dcp150c \
+	&& dpkg -i --force-architecture /dcp150clpr-1.0.1-1.i386.deb \
+&& dpkg -i --force-architecture /dcp150ccupswrapper-1.0.1-1.i386.deb
 
 # Prepare CUPS container
 RUN chmod 755 /srv/run.sh
